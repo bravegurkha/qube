@@ -32,7 +32,7 @@ class ProjectController extends Controller
   );
 
   if($validator->fails()){
-      return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+      return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
   }
   $file_name = rand(10000,1000000000).'_'.time();
   $path = public_path('images/projects/'.$file_name.'.jpg');
@@ -69,13 +69,13 @@ class ProjectController extends Controller
     );
 
     if($validator->fails()){
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $projects =  Projects::where('user_id',$request->user_id)->get();
 
     if(empty($projects)){
-        return response()->json(['success' => false, 'error' => "no projects", 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => "no projects", 'status' => 400]);
     }
     return response()->json(['success' => true, 'data' => $projects, 'status' => 200]);
 
@@ -93,12 +93,12 @@ class ProjectController extends Controller
     );
 
     if($validator->fails()){
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
     $project = Projects::where('id',$request->id)->first();
 
     if(empty($project)){
-        return response()->json(['success' => false, 'error' => "project not found", 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => "project not found", 'status' => 400]);
     }
 
     return response()->json(['success' => true, 'data' => $project, 'status' => 200]);

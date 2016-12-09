@@ -30,7 +30,7 @@ class UserController extends Controller
         ));
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
 
         $id = $request->id;
@@ -39,7 +39,7 @@ class UserController extends Controller
         if (!empty($user_data)) {
             return response()->json(['success' => true, 'data' => $user_data, 'status' => 200]);
         } else {
-            return response()->json(['success' => false, 'error' => 'user cannot be found', 'error_code' => 404]);
+            return response()->json(['success' => false, 'error' => 'user cannot be found', 'status' => 404]);
         }
     }
 
@@ -56,7 +56,7 @@ class UserController extends Controller
             ));
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
 
         $credentials = $request->only('email','password');
@@ -68,10 +68,10 @@ class UserController extends Controller
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(["success" => false,"error" => "invalid_credentials","error_code" => 401]);
+                return response()->json(["success" => false,"error" => "invalid_credentials","status" => 401]);
             }
         } catch (JWTException $e) {
-            return response()->json(["success" => false,"error" => "couldnt_create_token","error_code" => 500]);
+            return response()->json(["success" => false,"error" => "couldnt_create_token","status" => 500]);
 
         }
 
@@ -185,7 +185,7 @@ class UserController extends Controller
             );
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
         $token = rand(100000, 9999999);
         \DB::table('password_resets')->insert(array(
@@ -202,7 +202,7 @@ class UserController extends Controller
 
             return response()->json(['success' => true, 'data' => 'email sent', 'status' => 200]);
         } catch (Expection $e) {
-            return response()->json(['success' => false, 'error' => 'problem sending token', 'error_code' => 501]);
+            return response()->json(['success' => false, 'error' => 'problem sending token', 'status' => 501]);
         }
     }
 
@@ -221,7 +221,7 @@ class UserController extends Controller
             ));
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
 
         $reset_details = \DB::table('password_resets')->where('email', $request->email)->orderBy('created_at', 'desc')->first();
@@ -243,7 +243,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'data' => compact('token'), 'status' => 200]);
         }
 
-        return response()->json(['success' => false, 'error' => 'invalid data provided', 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => 'invalid data provided', 'status' => 400]);
     }
 
     public function follow(Request $request)
@@ -257,7 +257,7 @@ class UserController extends Controller
             ));
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
         $my_id = JWTAuth::authenticate()->id;
 
@@ -280,7 +280,7 @@ class UserController extends Controller
             ));
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
 
         $followers = User::where('id', $request->id)->first()->followers();
@@ -299,7 +299,7 @@ class UserController extends Controller
             ));
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
 
         $followed = User::where('id', $request->id)->first()->followed();
@@ -348,7 +348,7 @@ class UserController extends Controller
             ));
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
 
         $user_reviews = UserReviews::where('user_id', $request->id)->all();

@@ -21,9 +21,9 @@ class MessageController extends Controller
       ));
 
       if($validator->fails()){
-          return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+          return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
       }
-      
+
       $message = new Messages();
       $message->from = $request->from;
       $message->to = $request->to;
@@ -46,7 +46,7 @@ class MessageController extends Controller
     ));
 
     if($validator->fails()){
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $messages = Messages::where('from',$request->from)->where('to',$request->to)->get();

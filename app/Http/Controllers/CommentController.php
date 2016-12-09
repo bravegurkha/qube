@@ -22,7 +22,7 @@ class CommentController extends Controller
   );
 
   if($validator->fails()){
-      return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+      return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
   }
 
   $comment = new Comments();
@@ -46,7 +46,7 @@ class CommentController extends Controller
     );
 
     if($validator->fails()){
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $comments = Comments::where('post_id',$request->post_id)->get();

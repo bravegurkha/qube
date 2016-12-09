@@ -24,7 +24,7 @@ class PortfolioController extends Controller
   );
 
   if($validator->fails()){
-      return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+      return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
   }
 
   $file_name = rand(10000,1000000000).'_'.time();
@@ -56,7 +56,7 @@ public function getByUser(Request $request){
   );
 
   if($validator->fails()){
-      return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+      return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
   }
 
   $user_id = $request->user_id;
@@ -76,7 +76,7 @@ public function getById(Request $request)
   );
 
   if($validator->fails()){
-      return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+      return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
   }
 
   $portfolio = Portfolio::where('id',$request->id)->get()->first();

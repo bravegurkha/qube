@@ -24,7 +24,7 @@ class BidController extends Controller
 
     if($validator->fails())
     {
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $bid = new Bids();
@@ -49,7 +49,7 @@ class BidController extends Controller
 
       if($validator->fails())
       {
-          return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+          return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
       }
 
     $bids = Bids::where('project_id',$request->project_id)->get();
@@ -68,7 +68,7 @@ class BidController extends Controller
 
       if($validator->fails())
       {
-          return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+          return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
       }
 
     $bids = Bids::where('user_id',$request->user_id)->get();
@@ -88,7 +88,7 @@ class BidController extends Controller
 
       if($validator->fails())
       {
-          return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+          return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
       }
 
     $bid = Bids::where('id',$request->id)->get();

@@ -23,7 +23,7 @@ class PostController extends Controller
     );
 
     if ($validator->fails()) {
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $post = new Posts();
@@ -45,7 +45,7 @@ public function getPosts(Request $request){
     ));
 
     if ($validator->fails()){
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $posts = Posts::where('user_id', $request->user_id)->get();
@@ -65,7 +65,7 @@ public function getPost(Request $request)
     );
 
     if ($validator->fails()) {
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $post = Posts::where('id', $request->id)->get()->first();
@@ -86,7 +86,7 @@ public function like(Request $request)
     ));
 
     if ($validator->fails()) {
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
     $post_likes = new PostLikes();
@@ -108,7 +108,7 @@ public function getLikes(Request $request)
     ));
 
     if ($validator->fails()) {
-        return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
+        return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
     $likes = PostLikes::where('post_id', $request->post_id)->count();
 
