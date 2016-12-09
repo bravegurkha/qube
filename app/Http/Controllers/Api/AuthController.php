@@ -42,6 +42,6 @@ public function getAuthenticatedUser()
         }
 
     // the token is valid and we have found the user via the sub claim
-    return response()->json(['success' => true, 'data' => compact('token'), 'status' => 200]);
+    return response()->json(['success' => true, 'data' => $user, 'status' => 200]);
     }
 }

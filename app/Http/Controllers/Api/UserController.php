@@ -65,7 +65,7 @@ class UserController extends Controller
         $user->verified = false;
         $user->save();
 
-        return response()->json(['success' => true, 'data' => compact('token'), 'status' => 201]);
+        return response()->json(compact('token'));
     }
 
     public function completeAccount(Request $request)
