@@ -206,8 +206,9 @@ class UserController extends Controller
         try {
             mail(
                 $to = $request->email,
-                $message = $token,
-                $subject = 'Password Reset'
+                $from = 'info@qubenow.com',
+                $message = "Dear User, \n ".$request->email.",\n\t In order to reset your password you can use the following token and use it to reset your password.\nToken: ".$token."\n\n",
+                $subject = 'Resetting the password'
                 );
 
             return response()->json(['success' => true, 'data' => 'email sent', 'status' => 200]);
