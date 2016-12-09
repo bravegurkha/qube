@@ -150,9 +150,22 @@ class UserController extends Controller
         return response()->json(['success' => true, 'data' => 'updated', 'status' => 200]);
     }
 
-    public function getNearUsers()
+    public function getNearUsers(Request $request)
     {
-        $user = JWTAuth::parseToken()->authenticate();
+        $validator = \Validator::make(
+            array(
+            'id' => $request->email,
+            ),
+            array(
+            'email' => 'required|exists:users,id',
+            )
+            );
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
+        }
+
+        $user = User::where('id',$request->id)->first();
         $lat_user = $user->lat;
         $long_user = $user->long;
         $near_lats = array($lat_user - 4, $lat_user + 4);
@@ -256,10 +269,10 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
-        $my_id = JWTAuth::authenticate()->id;
+        $id = JWTAuth::authenticate()->id;
 
         \DB::table('follows')->insert(array(
-            'follower' => $my_id,
+            'follower' => $id,
             'followed' => $request->id,
             ));
 

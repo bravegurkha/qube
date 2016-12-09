@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Messages;
+use JWTAuth;
 
 class MessageController extends Controller
 {
@@ -10,12 +11,10 @@ class MessageController extends Controller
   {
       $validator = \Validator::make(
       array(
-        'from' => $request->from,
         'to' => $request->to,
         'message' => $request->message,
       ),
       array(
-        'from' => 'required|exists:users,id',
         'to' => 'required|exists:users,id',
         'message' => 'required',
       ));
@@ -23,9 +22,10 @@ class MessageController extends Controller
       if($validator->fails()){
           return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
       }
+      $id = JWTAuth::authenticate()->id;
 
       $message = new Messages();
-      $message->from = $request->from;
+      $message->from = $id;
       $message->to = $request->to;
       $message->message = $request->message;
       $message->save();
@@ -38,18 +38,18 @@ class MessageController extends Controller
     $validator = \Validator::make(
     array(
       'from' => $request->from,
-      'to' => $request->to,
     ),
     array(
       'from' => 'required|exists:users,id',
-      'to' => 'required|exists:users,id',
     ));
 
     if($validator->fails()){
         return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
 
-    $messages = Messages::where('from',$request->from)->where('to',$request->to)->get();
+    $id = JWTAuth::authenticate()->id;
+
+    $messages = Messages::where('from',$request->from)->where('to',$id)->get();
     return response()->json(['success' => true, 'data' => $messages, 'status' => 200]);
   }
 }
