@@ -36,11 +36,8 @@ class UserController extends Controller
         $id = $request->id;
 
         $user_data = User::where('id', $id)->first();
-        if (!empty($user_data)) {
-            return response()->json(['success' => true, 'data' => $user_data, 'status' => 200]);
-        } else {
-            return response()->json(['success' => false, 'error' => 'user cannot be found', 'status' => 404]);
-        }
+        return response()->json(['success' => true, 'data' => $user_data, 'status' => 200]);
+
     }
 
     public function partialSignup(Request $request)
@@ -68,10 +65,10 @@ class UserController extends Controller
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(["success" => false,"error" => "invalid_credentials","status" => 401]);
+                return response()->json(["success" => false,"error" => array("credentials" => "invalid_credentials"),"status" => 401]);
             }
         } catch (JWTException $e) {
-            return response()->json(["success" => false,"error" => "couldnt_create_token","status" => 500]);
+            return response()->json(["success" => false,"error" => array("token " => "couldnt_create_token"),"status" => 500]);
 
         }
 
@@ -202,7 +199,7 @@ class UserController extends Controller
 
             return response()->json(['success' => true, 'data' => 'email sent', 'status' => 200]);
         } catch (Expection $e) {
-            return response()->json(['success' => false, 'error' => 'problem sending token', 'status' => 501]);
+            return response()->json(['success' => false, 'error' => array("reset" => "problem sending token"), 'status' => 501]);
         }
     }
 

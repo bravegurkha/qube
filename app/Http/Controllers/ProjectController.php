@@ -74,9 +74,6 @@ class ProjectController extends Controller
 
     $projects =  Projects::where('user_id',$request->user_id)->get();
 
-    if(empty($projects)){
-        return response()->json(['success' => false, 'error' => "no projects", 'status' => 400]);
-    }
     return response()->json(['success' => true, 'data' => $projects, 'status' => 200]);
 
   }
@@ -96,10 +93,6 @@ class ProjectController extends Controller
         return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
     }
     $project = Projects::where('id',$request->id)->first();
-
-    if(empty($project)){
-        return response()->json(['success' => false, 'error' => "project not found", 'status' => 400]);
-    }
 
     return response()->json(['success' => true, 'data' => $project, 'status' => 200]);
   }
