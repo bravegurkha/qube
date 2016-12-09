@@ -15,10 +15,10 @@ class AuthController extends Controller
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(["success" => false,"error" => ["credentials" => "invalid_credentials"],"status" => 401]);
+                return response()->json(["success" => false,"error" => ["credentials" => "invalid credentials"],"status" => 401]);
             }
         } catch (JWTException $e) {
-            return response()->json(["success" => false,"error" => ["token" => "couldnt_create_token"],"status" => 500]);
+            return response()->json(["success" => false,"error" => ["token" => "couldnt create token"],"status" => 500]);
 
         }
 
@@ -30,15 +30,15 @@ class AuthController extends Controller
     {
         try {
             if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
+                return response()->json(["success" => false,"error" => ["user" => "user not found"],"status" => 400]);
             }
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            return response()->json(["success" => false,"error" => ["token" => "token_expired"],"status" => $e->getStatusCode()]);
+            return response()->json(["success" => false,"error" => ["token" => "token expired"],"status" => $e->getStatusCode()]);
 
         } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            return response()->json(["success" => false,"error" => ["token" => "token_invalid"],"status" => $e->getStatusCode()]);
+            return response()->json(["success" => false,"error" => ["token" => "token invalid"],"status" => $e->getStatusCode()]);
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-            return response()->json(["success" => false,"error" => ["token" => "token_absent"],"status" => $e->getStatusCode()]);
+            return response()->json(["success" => false,"error" => ["token" => "token absent"],"status" => $e->getStatusCode()]);
         }
 
         // the token is valid and we have found the user via the sub claim
