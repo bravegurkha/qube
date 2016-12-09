@@ -59,13 +59,23 @@ class UserController extends Controller
             return response()->json(['success' => false, 'error' => $validator->messages(), 'error_code' => 400]);
         }
 
+        $credentials = $request->only('email','password');
         $user = new User();
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->verified = false;
         $user->save();
 
-        return response()->json(compact('token'));
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(["success" => false,"error" => "invalid_credentials","error_code" => 401]);
+            }
+        } catch (JWTException $e) {
+            return response()->json(["success" => false,"error" => "couldnt_create_token","error_code" => 500]);
+
+        }
+
+        return response()->json(['success' => true, 'data' => compact('token'), 'status' => 200]);
     }
 
     public function completeAccount(Request $request)
@@ -76,6 +86,13 @@ class UserController extends Controller
         if ($request->has('name')) {
             $updateArray['name'] = $request->name;
         }
+
+        if ($request->has('email')) {
+            $updateArray['email'] = $request->name;
+            $updateArray['verified'] = false;
+
+        }
+
 
         if ($request->has('password')) {
             $updateArray['password'] = $request->password;
@@ -131,8 +148,7 @@ class UserController extends Controller
             $updateArray['image'] = $url;
         }
 
-        User::where('id', $id)
-            ->update($updateArray);
+        User::where('id', $id)->update($updateArray);
 
         return response()->json(['success' => true, 'data' => 'updated', 'status' => 200]);
     }

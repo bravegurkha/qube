@@ -16,7 +16,7 @@ class AuthController extends Controller
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(["success" => false,"error" => "invalid_credentials","error_code" => 401]);
-    }
+            }
         } catch (JWTException $e) {
             return response()->json(["success" => false,"error" => "couldnt_create_token","error_code" => 500]);
 
@@ -26,7 +26,7 @@ class AuthController extends Controller
     }
 
     // somewhere in your controller
-public function getAuthenticatedUser()
+    public function getAuthenticatedUser()
     {
         try {
             if (!$user = JWTAuth::parseToken()->authenticate()) {
@@ -41,7 +41,7 @@ public function getAuthenticatedUser()
             return response()->json(["success" => false,"error" => "token_absent","error_code" => $e->getStatusCode()]);
         }
 
-    // the token is valid and we have found the user via the sub claim
-    return response()->json(['success' => true, 'data' => $user, 'status' => 200]);
+        // the token is valid and we have found the user via the sub claim
+        return response()->json(['success' => true, 'data' => $user, 'status' => 200]);
     }
 }
