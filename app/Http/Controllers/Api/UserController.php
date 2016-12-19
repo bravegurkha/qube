@@ -35,7 +35,12 @@ class UserController extends Controller
 
         $id = $request->id;
 
-        $user_data = User::where('id', $id)->first();
+        $user = User::where('id', $id)->first();
+        $extra_data = array('followers' => $user->followers(), 'following'=> $user->following(), 'projects_count' => $user->projects_count());
+        $user_data = array();
+        array_push($user_data,$user);
+        array_push($user_data,$extra_data);
+
         return response()->json(['success' => true, 'data' => $user_data, 'status' => 200]);
 
     }
@@ -65,10 +70,10 @@ class UserController extends Controller
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(["success" => false,"error" => array("credentials" => "invalid_credentials"),"status" => 401]);
+                return response()->json(["success" => false,"error" => "invalid_credentials","status" => 401]);
             }
         } catch (JWTException $e) {
-            return response()->json(["success" => false,"error" => array("token " => "couldnt_create_token"),"status" => 500]);
+            return response()->json(["success" => false,"error" => "couldnt_create_token","status" => 500]);
 
         }
 
@@ -150,22 +155,9 @@ class UserController extends Controller
         return response()->json(['success' => true, 'data' => 'updated', 'status' => 200]);
     }
 
-    public function getNearUsers(Request $request)
+    public function getNearUsers()
     {
-        $validator = \Validator::make(
-            array(
-            'id' => $request->email,
-            ),
-            array(
-            'email' => 'required|exists:users,id',
-            )
-            );
-
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
-        }
-
-        $user = User::where('id',$request->id)->first();
+        $user = JWTAuth::parseToken()->authenticate();
         $lat_user = $user->lat;
         $long_user = $user->long;
         $near_lats = array($lat_user - 4, $lat_user + 4);
@@ -206,14 +198,13 @@ class UserController extends Controller
         try {
             mail(
                 $to = $request->email,
-                $from = 'info@qubenow.com',
-                $message = "Dear User, \n ".$request->email.",\n\t In order to reset your password you can use the following token and use it to reset your password.\nToken: ".$token."\n\n",
-                $subject = 'Resetting the password'
+                $message = $token,
+                $subject = 'Password Reset'
                 );
 
             return response()->json(['success' => true, 'data' => 'email sent', 'status' => 200]);
         } catch (Expection $e) {
-            return response()->json(['success' => false, 'error' => array("reset" => "problem sending token"), 'status' => 501]);
+            return response()->json(['success' => false, 'error' => array("problem sending token"), 'status' => 501]);
         }
     }
 
@@ -270,10 +261,10 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['success' => false, 'error' => $validator->messages(), 'status' => 400]);
         }
-        $id = JWTAuth::authenticate()->id;
+        $my_id = JWTAuth::authenticate()->id;
 
         \DB::table('follows')->insert(array(
-            'follower' => $id,
+            'follower' => $my_id,
             'followed' => $request->id,
             ));
 
