@@ -40,4 +40,10 @@ class User extends Authenticatable
 
         return $followers;
     }
+
+    public function projects_count()
+    {
+        $projects_count = Projects::where('user_id',$this->id)->count();
+        return $projects_count;
+    }
 }
