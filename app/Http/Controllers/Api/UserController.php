@@ -290,7 +290,7 @@ class UserController extends Controller
         return response()->json(['success' => true, 'data' => $followers, 'status' => 200]);
     }
 
-    public function followed(Request $request)
+    public function following(Request $request)
     {
         $validator = \Validator::make(
             array(
