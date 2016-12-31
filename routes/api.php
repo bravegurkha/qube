@@ -10,10 +10,10 @@ Route::post('reset/confirm','Api\UserController@resetConfirm');
 
 Route::get('users/near','Api\UserController@getNearUsers');
 Route::get('user/followers','Api\UserController@followers');
-Route::get('user/followed','Api\UserController@followed');
+Route::get('user/following','Api\UserController@following');
 
-Route::post('projects','ProjectController@getProjects');
-Route::post('project','ProjectController@getProject');
+Route::get('projects','ProjectController@getProjects');
+Route::get('project','ProjectController@getProject');
 
 Route::get('posts','PostController@getPosts');
 Route::get('post','PostController@getPost');
