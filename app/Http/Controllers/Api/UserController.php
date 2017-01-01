@@ -175,7 +175,7 @@ class UserController extends Controller
         $long_user = $request->long;
         $near_lats = array($lat_user - 4, $lat_user + 4);
         $near_longs = array($long_user - 4, $long_user + 4);
-        ));
+        );
 
         $near_lats = array($lat_user - 4, $lat_user + 4);
         $near_longs = array($long_user - 4, $long_user + 4);
