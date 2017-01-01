@@ -34,7 +34,7 @@ class User extends Authenticatable
         return $followers;
     }
 
-    public function following()
+    public function followed()
     {
         $followers = \DB::table('follows')->where('followed',$this->id)->count();
 
