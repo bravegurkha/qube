@@ -155,7 +155,7 @@ class UserController extends Controller
         return response()->json(['success' => true, 'data' => 'updated', 'status' => 200]);
     }
 
-    public function getNearUsers(Request $request)
+    public function getNearUsers()
     {
        /* $validator = \Validator::make(
         array(
