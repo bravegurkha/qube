@@ -157,11 +157,7 @@ class UserController extends Controller
 
     public function getNearUsers(Request $request)
     {
-        /*$user = JWTAuth::parseToken()->authenticate();
-        $lat_user = $user->lat;
-        $long_user = $user->long;*/
-        
-        $validator = \Validator::make(
+       /* $validator = \Validator::make(
         array(
             'lat' => $request->lat,
             'long' => $request->long,
@@ -176,11 +172,15 @@ class UserController extends Controller
         }
         
         $lat_user = $request->lat;
-        $long_user = $request->long;
+        $long_user = $request->long;*/
+        
+        $user = JWTAuth::parseToken()->authenticate();
+        $lat_user = $user->lat;
+        $long_user = $user->long;
         
         $near_lats = array($lat_user - 4, $lat_user + 4);
         $near_longs = array($long_user - 4, $long_user + 4);
-        $users = User::where(1,1)->get();
+        $users = User::where($id,'!=',$user->id)->get();
         print_r($users); exit;
         $users_near = array();
         foreach ($users as $u) {
