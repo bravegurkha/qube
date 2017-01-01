@@ -180,7 +180,7 @@ class UserController extends Controller
         
         $near_lats = array($lat_user - 4, $lat_user + 4);
         $near_longs = array($long_user - 4, $long_user + 4);
-        $users = User::where(1)->get();
+        $users = User::where(1,1)->get();
         print_r($users); exit;
         $users_near = array();
         foreach ($users as $u) {
@@ -309,7 +309,7 @@ class UserController extends Controller
         return response()->json(['success' => true, 'data' => $followers, 'status' => 200]);
     }
 
-    public function following(Request $request)
+    public function followed(Request $request)
     {
         $validator = \Validator::make(
             array(
